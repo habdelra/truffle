@@ -1,4 +1,6 @@
-# @truffle/hdwallet-provider
+# parity-hdwallet-provider
+***This is the same as the @truffle/hdwallet-provider but adjusted so that the engine does not send `skipCache: true` flag which parity treats as an error.***
+
 HD Wallet-enabled Web3 provider. Use it to sign transactions for addresses derived from a 12 or 24 word mnemonic.
 
 ## Install

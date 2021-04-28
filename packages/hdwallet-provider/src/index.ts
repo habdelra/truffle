@@ -64,6 +64,8 @@ class HDWalletProvider {
       pollingInterval
     });
 
+    this.engine._blockTracker._setSkipCacheFlag = false
+
     if (!HDWalletProvider.isValidProvider(providerOrUrl)) {
       throw new Error(
         [

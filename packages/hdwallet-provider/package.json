@@ -1,6 +1,6 @@
 {
-  "name": "@truffle/hdwallet-provider",
-  "description": "HD Wallet-enabled Web3 provider",
+  "name": "parity-hdwallet-provider",
+  "description": "HD Wallet-enabled Web3 provider for parity",
   "license": "MIT",
   "author": "Tim Coulter <tim@trufflesuite.com>",
   "homepage": "https://github.com/trufflesuite/truffle/tree/master/packages/hdwallet-provider#readme",
