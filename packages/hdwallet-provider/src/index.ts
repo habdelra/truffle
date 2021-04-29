@@ -3,6 +3,7 @@ import { wordlist } from "ethereum-cryptography/bip39/wordlists/english";
 import * as EthUtil from "ethereumjs-util";
 import ethJSWallet from "ethereumjs-wallet";
 import { hdkey as EthereumHDKey } from "ethereumjs-wallet";
+import { signTypedData_v4 } from "eth-sig-util";
 import { Transaction } from "ethereumjs-tx";
 // @ts-ignore
 import ProviderEngine from "@trufflesuite/web3-provider-engine";
@@ -64,7 +65,9 @@ class HDWalletProvider {
       pollingInterval
     });
 
-    this.engine._blockTracker._setSkipCacheFlag = false
+    // Hack so that parity nodes won't barf on the "skipFlag: true" flag in the
+    // RPC call: https://github.com/MetaMask/web3-provider-engine/issues/346
+    this.engine._blockTracker._setSkipCacheFlag = false;
 
     if (!HDWalletProvider.isValidProvider(providerOrUrl)) {
       throw new Error(
@@ -182,6 +185,20 @@ class HDWalletProvider {
         },
         signPersonalMessage(...args: any[]) {
           this.signMessage(...args);
+        },
+        signTypedMessage({ from: checkSummedFrom, data }: any, cb: any) {
+          if (!data) {
+            cb("No data to sign");
+          }
+          let pkey;
+          let from = checkSummedFrom.toLowerCase();
+          if (tmpWallets[from]) {
+            pkey = tmpWallets[from].getPrivateKey();
+            const result = signTypedData_v4(pkey, { data });
+            cb(null, result);
+          } else {
+            cb("Account not found");
+          }
         }
       })
     );
